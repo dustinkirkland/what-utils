@@ -1,3 +1,9 @@
+what-utils (1.1) unreleased; urgency=low
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 01 Dec 2011 15:08:06 -0600
+
 what-utils (1.0-0ubuntu1) precise; urgency=low
 
   * Initial release, moving over from bikeshed
