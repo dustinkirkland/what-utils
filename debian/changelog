@@ -1,0 +1,5 @@
+what-utils (1.0) unreleased; urgency=low
+
+  * Initial release, moving over from bikeshed
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 19 Jul 2011 19:32:40 -0500
