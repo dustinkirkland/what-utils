@@ -22,11 +22,11 @@
 found=0
 for i in "$@"; do
 	if which "$i" >/dev/null; then
-		dpkg -S $(which "$i")
+		dpkg -S $(readlink -f $(which "$i"))
 		found=1
 	else
 		for j in $(locate "$i"); do
-			dpkg -S "$j" || true
+			dpkg -S $(readlink -f "$j") || true
 			found=1
 		done
 	fi
