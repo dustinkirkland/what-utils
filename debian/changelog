@@ -1,9 +1,9 @@
-what-utils (1.1) unreleased; urgency=low
+what-utils (1.1-0ubuntu1) raring; urgency=low
 
   * usr/bin/what-provides:
     - follow symlinks, which will help with alternatives-provided binaries
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 01 Dec 2011 15:08:06 -0600
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 05 Nov 2012 13:54:48 +0100
 
 what-utils (1.0-0ubuntu1) precise; urgency=low
 
