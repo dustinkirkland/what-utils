@@ -1,11 +1,11 @@
-what-utils (1.2) unreleased; urgency=low
+what-utils (1.2-0ubuntu1) xenial; urgency=low
 
   * usr/bin/how-many-binary, usr/bin/how-many-source,
     usr/share/man/man1/how-many-binary.1, usr/share/man/man1/how-many-
     source.1:
     - add the how-many-* utilities
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 05 Nov 2012 13:55:01 +0100
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 18 Apr 2016 13:32:29 -0500
 
 what-utils (1.1-0ubuntu1) raring; urgency=low
 
