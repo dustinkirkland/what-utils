@@ -42,8 +42,18 @@ done
 dir=$(mktemp -d)
 trap "rm -rf ${dir}" HUP INT QUIT ILL TRAP KILL BUS TERM
 cd "$dir"
+
+case "$arch" in
+	amd64|x86_64|*86)
+		archive="archive.ubuntu.com"
+	;;
+	*)
+		archive="ports.ubuntu.com"
+	;;
+esac
+
 for i in main universe restricted multiverse; do
-	u="http://archive.ubuntu.com/ubuntu/dists/$release/$i/binary-$arch/Packages.gz"
+	u="http://$archive/dists/$release/$i/binary-$arch/Packages.gz"
 	wget -q -O $i.gz "$u" >/dev/null 2>&1
 done
 if [ "$VERBOSE" = "1" ]; then
