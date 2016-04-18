@@ -1,0 +1,47 @@
+#!/bin/sh
+#
+#    how-many-source - how many source packages in Ubuntu
+#
+#    Copyright (C) 2016 Dustin Kirkland <kirkland@ubuntu.com>
+#
+#    Authors:
+#        Dustin Kirkland <kirkland@ubuntu.com>
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+release=$(distro-info --latest)
+VERBOSE=0
+for i in $@; do
+	case "$i" in
+		-r|--release)
+			release="$2"
+			shift 2
+		;;
+		-v|--verbose)
+			VERBOSE=1
+			shift
+		;;
+	esac
+done
+
+dir=$(mktemp -d)
+trap "rm -rf ${dir}" HUP INT QUIT ILL TRAP KILL BUS TERM
+cd "$dir"
+for i in main universe restricted multiverse; do
+	u="http://archive.ubuntu.com/ubuntu/dists/$release/$i/source/Sources.gz"
+	wget -q -O $i.gz "$u" >/dev/null 2>&1
+done
+if [ "$VERBOSE" = "1" ]; then
+	zgrep "^Package:" * | sort -u
+fi
+zgrep "^Package:" * | sort -u | wc -l
