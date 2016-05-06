@@ -1,6 +1,7 @@
 what-utils (1.5) unreleased; urgency=medium
 
-  * UNRELEASED
+  * usr/bin/how-many-binary:
+    - use ubuntu-ports on the ubuntu ports archive, for mirrors
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 06 May 2016 10:50:03 -0500
 

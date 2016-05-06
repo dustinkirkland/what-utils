@@ -49,7 +49,7 @@ case "$arch" in
 		archive="archive.ubuntu.com/ubuntu"
 	;;
 	*)
-		archive="ports.ubuntu.com"
+		archive="ports.ubuntu.com/ubuntu-ports"
 	;;
 esac
 
