@@ -20,7 +20,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 arch="amd64"
-release=$(distro-info --latest)
+. /etc/lsb-release 2>/dev/null || true
+release=$DISTRIB_CODENAME
 VERBOSE=0
 for i in $@; do
 	case "$i" in
@@ -45,7 +46,7 @@ cd "$dir"
 
 case "$arch" in
 	amd64|x86_64|*86)
-		archive="archive.ubuntu.com"
+		archive="archive.ubuntu.com/ubuntu"
 	;;
 	*)
 		archive="ports.ubuntu.com"
