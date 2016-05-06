@@ -1,9 +1,9 @@
-what-utils (1.5) unreleased; urgency=medium
+what-utils (1.5-0ubuntu1) yakkety; urgency=medium
 
   * usr/bin/how-many-binary:
     - use ubuntu-ports on the ubuntu ports archive, for mirrors
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 06 May 2016 10:50:03 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 06 May 2016 14:40:56 -0500
 
 what-utils (1.4-0ubuntu1) yakkety; urgency=medium
 
