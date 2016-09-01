@@ -1,6 +1,6 @@
 #!/bin/sh -e
 #
-#    what-provides - what package provides a binary in your path
+#    what-license - what license applies to a binary or package
 #
 #    Copyright (C) 2010 Dustin Kirkland <kirkland@ubuntu.com>
 #
@@ -19,19 +19,16 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-found=0
-for i in "$@"; do
-	if which "$i" >/dev/null; then
-		dpkg -S $(readlink -f $(which "$i"))
-		found=1
-	elif type "$i" >/dev/null; then
-		type "$i"
-		found=1
-	else
-		for j in $(locate "$i"); do
-			dpkg -S $(readlink -f "$j") || true
-			found=1
-		done
-	fi
-done
-[ "$found" = "1" ] || exit 1
+set -e
+
+target="$1"
+if [ -f "/usr/share/doc/$target/copyright" ]; then
+	source="$target"
+else
+	package=$(what-provides "$target" | head -n1 | awk -F: '{print $1}')
+	source=$(what-source "$package" | head -n1)
+fi
+if [ -f "/usr/share/doc/$source/copyright" ]; then
+	exec cat "/usr/share/doc/$source/copyright"
+fi
+exit 1

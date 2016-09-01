@@ -1,6 +1,8 @@
 what-utils (1.6) unreleased; urgency=medium
 
-  * UNRELEASED
+  * usr/bin/what-license, usr/bin/what-provides:
+    - handle shell built-ins
+    - add a what-license script
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 06 May 2016 14:40:59 -0500
 
