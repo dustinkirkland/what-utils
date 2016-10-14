@@ -8,7 +8,7 @@ Homepage: http://launchpad.net/what-utils
 
 Package: what-utils
 Architecture: all
-Depends: ${misc:Depends}
+Depends: ${misc:Depends}, distro-info
 Breaks: bikeshed (<< 1.19)
 Replaces: bikeshed (<< 1.19)
 Description: simple package query utilities

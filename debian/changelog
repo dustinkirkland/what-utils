@@ -3,6 +3,8 @@ what-utils (1.6) unreleased; urgency=medium
   * usr/bin/what-license, usr/bin/what-provides:
     - handle shell built-ins
     - add a what-license script
+  * debian/control:
+    - depend on distro-info
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 06 May 2016 14:40:59 -0500
 
