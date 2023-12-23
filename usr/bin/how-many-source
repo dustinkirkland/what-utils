@@ -53,11 +53,15 @@ case "$NAME" in
 		zgrep "^Package:" * | sort -u | wc -l
 	;;
 	Wolfi|wolfi)
-		git clone --depth=1 --quiet https://github.com/wolfi-dev/os.git
-		if [ "$VERBOSE" = "1" ]; then
-			grep -r "^package:" . | awk -F ":" '{print $1}' | sort -u | sed -e "s:^\.\/::"
-		fi
-		grep -r "^package:" . | awk -F ":" '{print $1}' | sort -u | wc -l
+                index=$(find /var/cache/apk -name "APKINDEX.*.tar.gz" | head -n1)
+                [ -s "$index" ] || apk update 2>&1 >/dev/null
+                index=$(find /var/cache/apk -name "APKINDEX.*.tar.gz" | head -n1)
+                tar xf "$index"
+                if [ "$VERBOSE" = "1" ]; then
+                        grep "^o:" APKINDEX | awk -F ":" '{print $2}' | sort -u
+                fi
+                grep "^o:" APKINDEX | awk -F ":" '{print $2}' | sort -u | wc -l
+
 	;;
 esac
 rm -rf ${dir}
