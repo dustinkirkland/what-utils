@@ -1,12 +1,16 @@
-what-utils (1.6) unreleased; urgency=medium
+what-utils (2.0) unreleased; urgency=medium
 
   * usr/bin/what-license, usr/bin/what-provides:
     - handle shell built-ins
     - add a what-license script
   * debian/control:
     - depend on distro-info
+  * usr/bin/how-many-binary, usr/bin/how-many-source,
+    usr/bin/what-license, usr/bin/what-provides, usr/bin/what-repo,
+    usr/bin/what-source:
+    - support both Ubuntu and Wolfi
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 06 May 2016 14:40:59 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 23 Dec 2023 13:13:41 -0600
 
 what-utils (1.5-0ubuntu1) yakkety; urgency=medium
 

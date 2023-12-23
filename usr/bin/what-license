@@ -3,9 +3,11 @@
 #    what-license - what license applies to a binary or package
 #
 #    Copyright (C) 2010 Dustin Kirkland <kirkland@ubuntu.com>
+#    Copyright (C) 2023 Dustin Kirkland <kirkland@chainguard.dev>
 #
 #    Authors:
 #        Dustin Kirkland <kirkland@ubuntu.com>
+#        Dustin Kirkland <kirkland@chainguard.dev>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -22,13 +24,29 @@
 set -e
 
 target="$1"
-if [ -f "/usr/share/doc/$target/copyright" ]; then
-	source="$target"
-else
-	package=$(what-provides "$target" | head -n1 | awk -F: '{print $1}')
-	source=$(what-source "$package" | head -n1)
-fi
-if [ -f "/usr/share/doc/$source/copyright" ]; then
-	exec cat "/usr/share/doc/$source/copyright"
-fi
+
+. /etc/os-release 2>/dev/null || true
+
+case "$NAME" in
+	Ubuntu|ubuntu)
+		if [ -f "/usr/share/doc/$target/copyright" ]; then
+			source="$target"
+		else
+			package=$(what-provides "$target" | head -n1 | awk -F: '{print $1}')
+			source=$(what-source "$package" | head -n1)
+		fi
+		if [ -f "/usr/share/doc/$source/copyright" ]; then
+			exec cat "/usr/share/doc/$source/copyright"
+		fi
+	;;
+	Wolfi|wolfi)
+		if what-provides "$target" 2>&1 | grep -qs " is owned by "; then
+			owner=$(what-provides "$target" 2>&1 | grep " is owned by " | sed -e "s/^.* //")
+			apk list | grep "$owner"
+		elif what-provides "$target" 2>&1 | grep -qs " may be found in these packages:"; then
+			what-provides "$target" 2>&1 | grep " \* .*: " | sed -e "s/^ \* //" -e "s/:.*$//" | xargs -i apk list {}
+		fi
+	;;
+esac
+
 exit 1

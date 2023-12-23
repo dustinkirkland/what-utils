@@ -3,9 +3,11 @@
 #    what-provides - what package provides a binary in your path
 #
 #    Copyright (C) 2010 Dustin Kirkland <kirkland@ubuntu.com>
+#    Copyright (C) 2023 Dustin Kirkland <kirkland@kirkland@chainguard.dev>
 #
 #    Authors:
 #        Dustin Kirkland <kirkland@ubuntu.com>
+#        Dustin Kirkland <kirkland@chainguard.dev>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,19 +21,54 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+. /etc/os-release 2>/dev/null || true
 found=0
+
+# Get package manager
+if which "dpkg" 2>&1 >/dev/null || type "dpkg" 2>&1 >/dev/null ; then
+	# Looks like we're in a Debian / Ubuntu system
+	CMD="dpkg -S"
+elif which "apk" 2>&1 >/dev/null || type "apk" 2>&1 >/dev/null ; then
+	# Looks like we're in a Wolfi / Alpine system
+	CMD="apk info --who-owns"
+else
+	exit 1
+fi
+
+# Get command-not-found
+CNF=
+for i in "/usr/lib/command-not-found" "/usr/libexec/command-not-found"; do
+	if [ -x "$i" ]; then
+		CNF="$i"
+		break
+	fi
+done
+
+# Look for our targets
 for i in "$@"; do
+	hit=0
+	# First, check if it's an executable in our PATH
 	if which "$i" >/dev/null; then
-		dpkg -S $(readlink -f $(which "$i"))
-		found=1
+		$CMD $(readlink -f $(which "$i")) && hit=1
+	# Next, check if it's a path to a file
+	elif [ -e "$i" ]; then
+		$CMD $(readlink -f "$i") && hit=1
+	# Or possibly an alias or something else
 	elif type "$i" >/dev/null; then
-		type "$i"
-		found=1
+		type "$i" && hit=1
+	# Or otherwise, let's use locate to search the filesystem
 	else
 		for j in $(locate "$i"); do
-			dpkg -S $(readlink -f "$j") || true
+			$CMD $(readlink -f "$j") || true
 			found=1
 		done
 	fi
+	# And if we still haven't found it, then let's search command-not-found
+	if [ "$hit" = "1" ]; then
+		found=1
+	elif [ -x "$CNF" ]; then
+		$CNF "$i" && found=1
+	fi
 done
+
 [ "$found" = "1" ] || exit 1

@@ -2,10 +2,12 @@
 #
 #    what-source - what source package provides some binary/source package
 #
-#    Copyright (C) 2011 Dustin Kirkland <kirkland@ubuntu.com>
+#    Copyright (C) 2016 Dustin Kirkland <kirkland@ubuntu.com>
+#    Copyright (C) 2023 Dustin Kirkland <kirkland@chainguard.dev>
 #
 #    Authors:
 #        Dustin Kirkland <kirkland@ubuntu.com>
+#        Dustin Kirkland <kirkland@chainguard.dev>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,4 +21,16 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-apt-cache show "$1" | grep "^Filename:" | sed -e "s:\(.*\)/\(.*\)/\(.*\)/\(.*\)/.*:\4:"
+if which apt-cache 2>&1 >/dev/null; then
+	apt-cache show "$1" | grep "^Filename:" | sed -e "s:\(.*\)/\(.*\)/\(.*\)/\(.*\)/.*:\4:"
+elif which apk 2>&1 >/dev/null; then
+	dir=$(mktemp -d)
+	trap "rm -rf ${dir}" HUP INT QUIT ILL TRAP KILL BUS TERM
+	cd "$dir"
+	index=$(find /var/cache/apk -name "APKINDEX.*.tar.gz" | head -n1)
+	[ -s "$index" ] || apk update 2>&1 >/dev/null
+	index=$(find /var/cache/apk -name "APKINDEX.*.tar.gz" | head -n1)
+	tar xf "$index"
+	grep -A40 "^P:$1$" APKINDEX | grep -m1 "^o:" | sed -e "s/.*://"
+	rm -rf ${dir}
+fi
